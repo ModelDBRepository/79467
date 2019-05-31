@@ -1,0 +1,66 @@
+README file for genesis code used to run simulations in
+
+"Using potassium currents to solve signal-to-noise problems in
+inhibitory feedforward networks of the striatum", by Kotaleski JH,
+Plenz D, Blackwell KT. in J Neurophysiol. 2006 Jan;95(1):331-41
+
+Main scripts are:
+
+rect-isi05-g3c7fast-A100corr.g, which uses different correlation
+values and the following use different values of A current:
+rect-isi05-g3c7fast-A60.g
+rect-isi05-g3c7fast-A100.g
+rect-isi05-g3c7fast-A80.g
+rect-isi05-g3c7fast-A120.g
+
+In addition, the following main scripts evalutes effect of dopamine:
+
+dopa-g3c7fast-A100.g
+dopa-g3c7fast-A120.g
+dopa-g3c7fast-A80.g
+
+to run them, just type genesis {filename}
+
+Note that the paramter corr is actually square root of the
+correlation.
+
+Before running the simulations, first it is necessary to create spike
+trains.
+
+E.g. one set of spike trains is the signal:
+rect400-isi05-0
+rect400-isi05-1, ...
+rect400-isi05-308
+
+is for a 400 ms long upstate repeated once every 700 msec up to 10
+sec.  These files contain the spike times, and were created using an
+exponential distribution with mean interspike interval of 0.5 sec.
+The file rect200-isi05.log shows the parameters used with the C
+program fs-sine to make these files.
+
+another set of spike trains is the "noise" or down-state signal:
+noise-isi"@{noiseisi}@"-" These files also contain spike times, and
+were created using an exponential distribution with mean interspike
+interval of {noiseisi}.  The script Poisson_train.g (which uses the
+genesis object timetable) was used to make the noise spike trains.
+
+To run the simulation in voltage clamp:
+1. simdt=1e-6 (instead of 1e-5)
+
+2. add the line
+include vclamp.g (before or after the readcell command)
+
+3. After the readcell command, add the following lines:
+make_vclamp /fs/soma
+setfield /vclamp/pulsegen level1 {vh} width1 0.00 delay1 1000.0
+baselevel {vh} trig_mode 0 trig_time 0.0
+
+where {vh} is the value of the voltage clamp
+
+4. To look at the data, either use the make_vcgraph function, or add
+the line: addmsg /vclamp/rev_sign /output/plot SAVE output
+
+after the command: create asc_file /output/plot
+
+See the file vclamp5-sim.g for an example (this was used to traces for 
+figure 3).

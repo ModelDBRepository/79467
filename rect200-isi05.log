@@ -1,0 +1,5 @@
+rect200-isi05- files: 309 modfreq: 2 maxtime: 10 dt: 1e-05 peakfreq: 2 Seed: 9 Up duration: 0.2
+numevents=80
+events allocated
+eventlist allocated, 309 files by 80 events
+total number of events=2567, frequency=256.7
